@@ -1,9 +1,12 @@
 package com.soma.tripper.domain.posts;
 
+import com.soma.tripper.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +16,9 @@ import javax.persistence.Id;
 @NoArgsConstructor(access=AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Posts {
+
+
+public class Posts extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;

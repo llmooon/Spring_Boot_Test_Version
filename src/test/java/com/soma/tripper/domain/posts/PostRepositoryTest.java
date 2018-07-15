@@ -7,17 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PostRepositoryTest {
 
     @Autowired
-    PostRepository postRepository;
+    PostsRepository postRepository;
 
     @After
     public void cleanup(){
@@ -33,12 +36,29 @@ public class PostRepositoryTest {
                 .author("llmooon@naver.com")
                 .build());
 
-    //when - 테스트 하고자 하는 행위 선언
-    List<Posts> postsList = postRepository.findAll();
+        //when - 테스트 하고자 하는 행위 선언
+        List<Posts> postsList = postRepository.findAll();
 
-    //then - 테스트 결과 검증
-    Posts posts = postsList.get(0);
-    assertThat(posts.getTitle(),is("테스트 게시글"));
-    assertThat(posts.getContent(),is("테스트 본문"));
+        //then - 테스트 결과 검증
+        Posts posts = postsList.get(0);
+        assertThat(posts.getTitle(),is("테스트 게시글"));
+        assertThat(posts.getContent(),is("테스트 본문"));
+    }
+
+    @Test
+    public void BaseTimeEntityRegistration(){
+        LocalDateTime now = LocalDateTime.now();
+        postRepository.save(Posts.builder()
+                .title("테스트 게시글")
+                .content("테스트 본문")
+                .author("llmooon@naver.com")
+                .build()
+        );
+
+        List<Posts> postsList = postRepository.findAll();
+
+        Posts posts = postsList.get(0);
+        assertTrue(posts.getCreatedDate().isAfter(now));
+        //System.out.println(posts.getModifiedDate().isAfter(now));
     }
 }
